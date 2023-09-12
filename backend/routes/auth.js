@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 const JWT_TOKEN = "mynameisbhupen";
 
-//Create a User using :POST "api/auth/". Doesn't require Auth
+//Route 1: Create a User using :POST "api/auth/". Doesn't require Auth
 router.post(
   "/createuser",
   [
@@ -51,4 +51,43 @@ router.post(
   }
 );
 
+//Route 2: Login a User using :POST "api/auth/". No login required
+router.post(
+  "/login",
+  [
+    check("email", "Email is required").isEmail(),
+    check("password", "Password is required").exists(),
+  ],
+  async (req, res) => {
+    //If there are errors, return Bad request and the errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array() });
+    }
+
+    try {
+      let user = await User.findOne({ email: req.body.email });
+      if (!user) {
+        return res.status(400).send("Invalid Credentials");
+      }
+      const passCompare = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
+      if (!passCompare) {
+        return res.status(400).send("Invalid Credentials");
+      }
+
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      const authToken = jwt.sign(data, JWT_TOKEN);
+      res.json({ authToken });
+    } catch {
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
 module.exports = router;
