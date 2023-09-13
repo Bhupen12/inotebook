@@ -38,7 +38,6 @@ router.post(
         user: req.user.id,
       });
       const savedNote = await note.save();
-      console.log(savedNote);
       res.status(200).json(savedNote);
     } catch (error) {
       console.log(error);
@@ -47,7 +46,7 @@ router.post(
   }
 );
 
-// // Route 3: Update a note using: POST "/api/note/updatenote/:id". Login required
+// Route 3: Update a note using: POST "/api/note/updatenote/:id". Login required
 router.put("/updatenote/:id", fetchuser, async (req, res) => {
   try {
     const { title, description, tag } = req.body;
@@ -81,6 +80,26 @@ router.put("/updatenote/:id", fetchuser, async (req, res) => {
   } catch (error) {
     console.log("Catch: ", error);
     res.send({ error: error.message });
+  }
+});
+
+// Route 4: Delete a note using: DELETE "/api/note/deletenote/:id". Login required
+router.delete("/deletenote/:id", fetchuser, async (req, res) => {
+  try {
+    let note = await Note.findById(req.params.id);
+    if (!note) {
+      res.status(404).send("Not found");
+    }
+
+    if (note.user.toString() !== req.user.id) {
+      res.status(401).send("Not Allowed");
+    }
+
+    note = await Note.findByIdAndDelete(req.params.id);
+    res.send("Successfully Deleted");
+  } catch (error) {
+    console.log("Catch: ", error);
+    res.status(500).send("Internal Server Error");
   }
 });
 module.exports = router;
