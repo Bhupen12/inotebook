@@ -1,13 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
+  let location = useLocation();
+  React.useEffect(() => {
+    console.log(location.pathname);
+  }, [location]);
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
-            Navbar
+            iNoteBook
           </Link>
           <button
             className="navbar-toggler"
@@ -23,23 +28,23 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link active" aria-current="page" to="/">
+                <Link
+                  className={`nav-link ${
+                    location.pathname === `/` ? "active" : ""
+                  }`}
+                  aria-current="page"
+                  to="/"
+                >
                   Home
                 </Link>
               </li>
-              <li className="nav-item">
+              <li
+                className={`nav-item ${
+                  location.pathname === "/about" ? "active" : ""
+                }`}
+              >
                 <Link className="nav-link" to="/about">
                   About
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/">
-                  Pricing
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link disabled" aria-disabled="true">
-                  Disabled
                 </Link>
               </li>
             </ul>
