@@ -1,4 +1,5 @@
 const express = require("express");
+var cors = require("cors");
 
 const connectToMongo = require("./db");
 connectToMongo();
@@ -8,6 +9,7 @@ const port = 5000;
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 
 // Routing
 app.use("/api/note/", require("./routes/note"));
