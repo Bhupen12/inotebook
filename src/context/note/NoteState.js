@@ -1,5 +1,6 @@
 import NoteContext from "./NoteContext";
 import { useState } from "react";
+
 const NoteState = (props) => {
   const host = "http://localhost:5000/";
   const notesInitial = [];
@@ -19,36 +20,61 @@ const NoteState = (props) => {
     });
 
     const json = await response.json();
-    console.log(json);
-
     setNotes(json);
   };
+
   // Add Notes
-  const addNote = (title, description, tag) => {
+  const addNote = async (title, description, tag) => {
     console.log("Adding Notes");
     //Todo Api Call
-    const note = {
-      _id: "6501feagsr0d3ef250e49630ea1628",
-      user: "64ff4e333255c538d663e5246933",
-      title: title,
-      description: description,
-      tag: tag,
-      timestamp: "2023-09-13T17:26:43.746Z",
-      __v: 0,
-    };
-    setNotes(notes.concat(note));
+    const response = await fetch(`${host}api/note/addnote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRmZjRlMzNjNTM4ZDY2M2U1MjQ2OTMzIn0sImlhdCI6MTY5NDU0MTUwNH0.NqUVOxuxkVWBpCnnDZ0vMjL-YSWFCao5ZGHOdFVFd08",
+      },
+      body: JSON.stringify({ title, description, tag }),
+    });
+    console.log(response);
   };
 
   //Edit node
-  const editNote = () => {};
+  const editNote = async (id, title, description, tag) => {
+    //Api Call
+    const response = await fetch(`${host}api/note/updatenote/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRmZjRlMzNjNTM4ZDY2M2U1MjQ2OTMzIn0sImlhdCI6MTY5NDU0MTUwNH0.NqUVOxuxkVWBpCnnDZ0vMjL-YSWFCao5ZGHOdFVFd08",
+      },
+      body: JSON.stringify({ title, description, tag }),
+    });
+
+    //logic
+    for (let index = 0; index < notes.length; ++index) {
+      const element = notes[index];
+      if (element._id === id) {
+        element.title = title;
+        element.description = description;
+        element.tag = tag;
+        break;
+      }
+    }
+  };
 
   //delete note
-  const deleteNote = (id) => {
-    console.log(`delete notes id: ${id}`);
-    const newNote = notes.filter((note) => {
-      return note._id !== id;
+  const deleteNote = async (id) => {
+    const response = await fetch(`${host}api/note/deletenote/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRmZjRlMzNjNTM4ZDY2M2U1MjQ2OTMzIn0sImlhdCI6MTY5NDU0MTUwNH0.NqUVOxuxkVWBpCnnDZ0vMjL-YSWFCao5ZGHOdFVFd08",
+      },
     });
-    setNotes(newNote);
+    console.log(response);
   };
 
   return (

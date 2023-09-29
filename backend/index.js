@@ -8,8 +8,8 @@ const app = express();
 const port = 5000;
 
 // Middleware
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 // Routing
 app.use("/api/note/", require("./routes/note"));

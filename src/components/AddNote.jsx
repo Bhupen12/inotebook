@@ -8,7 +8,7 @@ const AddNote = () => {
   const [note, setNote] = useState({
     title: "",
     description: "",
-    tag: "default",
+    tag: "",
   });
 
   const onChange = (event) => {
@@ -25,7 +25,7 @@ const AddNote = () => {
       <h1>Add Your Notes</h1>
       <form className="container my-3">
         <div className="mb-3">
-          <label htmlFor="exampleInputEmail1" className="form-label">
+          <label htmlFor="title" className="form-label">
             Title
           </label>
           <input
@@ -37,7 +37,7 @@ const AddNote = () => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="exampleInputPassword1" className="form-label">
+          <label htmlFor="description" className="form-label">
             Description
           </label>
           <input
@@ -48,16 +48,19 @@ const AddNote = () => {
             onChange={onChange}
           />
         </div>
-        <div className="mb-3 form-check">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="exampleCheck1"
-          />
-          <label className="form-check-label" htmlFor="exampleCheck1">
-            Check me out
+        <div className="mb-3">
+          <label htmlFor="tag" className="form-label">
+            Tag
           </label>
+          <input
+            type="text"
+            className="form-control"
+            id="tag"
+            name="tag"
+            onChange={onChange}
+          />
         </div>
+
         <button
           type="submit"
           className="btn btn-primary"
