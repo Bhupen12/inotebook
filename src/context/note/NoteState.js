@@ -25,7 +25,6 @@ const NoteState = (props) => {
 
   // Add Notes
   const addNote = async (title, description, tag) => {
-    console.log("Adding Notes");
     //Todo Api Call
     const response = await fetch(`${host}api/note/addnote`, {
       method: "POST",
@@ -36,7 +35,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }),
     });
-    console.log(response);
+    getNotes();
   };
 
   //Edit node
@@ -53,15 +52,17 @@ const NoteState = (props) => {
     });
 
     //logic
+    const newNotes = JSON.parse(JSON.stringify(notes));
     for (let index = 0; index < notes.length; ++index) {
-      const element = notes[index];
+      const element = newNotes[index];
       if (element._id === id) {
-        element.title = title;
-        element.description = description;
-        element.tag = tag;
+        newNotes[index].title = title;
+        newNotes[index].description = description;
+        newNotes[index].tag = tag;
         break;
       }
     }
+    setNotes(newNotes);
   };
 
   //delete note
@@ -74,7 +75,7 @@ const NoteState = (props) => {
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRmZjRlMzNjNTM4ZDY2M2U1MjQ2OTMzIn0sImlhdCI6MTY5NDU0MTUwNH0.NqUVOxuxkVWBpCnnDZ0vMjL-YSWFCao5ZGHOdFVFd08",
       },
     });
-    console.log(response);
+    getNotes();
   };
 
   return (

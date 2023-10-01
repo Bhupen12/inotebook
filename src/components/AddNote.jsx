@@ -36,6 +36,7 @@ const AddNote = () => {
             onChange={onChange}
           />
         </div>
+
         <div className="mb-3">
           <label htmlFor="description" className="form-label">
             Description
@@ -48,6 +49,7 @@ const AddNote = () => {
             onChange={onChange}
           />
         </div>
+
         <div className="mb-3">
           <label htmlFor="tag" className="form-label">
             Tag
@@ -66,7 +68,7 @@ const AddNote = () => {
           className="btn btn-primary"
           onClick={handleSubmit}
         >
-          Submit
+          Add Note
         </button>
       </form>
     </div>
