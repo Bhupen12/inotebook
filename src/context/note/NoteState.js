@@ -35,7 +35,10 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }),
     });
-    getNotes();
+
+    // clint side
+    const note = await response.json();
+    setNotes(notes.concat(note));
   };
 
   //Edit node
@@ -50,6 +53,7 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag }),
     });
+    await response.json();
 
     //logic
     const newNotes = JSON.parse(JSON.stringify(notes));
@@ -67,7 +71,7 @@ const NoteState = (props) => {
 
   //delete note
   const deleteNote = async (id) => {
-    const response = await fetch(`${host}api/note/deletenote/${id}`, {
+    await fetch(`${host}api/note/deletenote/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +79,10 @@ const NoteState = (props) => {
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRmZjRlMzNjNTM4ZDY2M2U1MjQ2OTMzIn0sImlhdCI6MTY5NDU0MTUwNH0.NqUVOxuxkVWBpCnnDZ0vMjL-YSWFCao5ZGHOdFVFd08",
       },
     });
-    getNotes();
+    const newNotes = notes.filter((note) => {
+      return note._id !== id;
+    });
+    setNotes(newNotes);
   };
 
   return (

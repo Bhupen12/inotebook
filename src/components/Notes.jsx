@@ -4,7 +4,7 @@ import NoteItems from "./NoteItems";
 import AddNote from "./AddNote";
 
 const Notes = () => {
-  const context = new useContext(noteContext);
+  const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
   useEffect(() => {
     getNotes();
@@ -132,6 +132,9 @@ const Notes = () => {
                 type="button"
                 className="btn btn-primary"
                 onClick={handleSubmit}
+                disabled={
+                  note.etitle.length < 5 || note.edescription.length < 5
+                }
               >
                 Save changes
               </button>
@@ -141,6 +144,10 @@ const Notes = () => {
       </div>
       <div className="row my-3">
         <h1>Your Notes: </h1>
+        <p className="container">
+          {notes.length === 0 && "No notes found"}
+          {notes.length}
+        </p>
         {notes.map((note) => {
           return (
             <NoteItems key={note._id} updateNote={updateNote} note={note} />
