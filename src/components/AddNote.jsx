@@ -18,6 +18,7 @@ const AddNote = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     addNote(note.title, note.description, note.tag);
+    setNote({ title: "", description: "", tag: "" });
   };
 
   return (
@@ -33,6 +34,7 @@ const AddNote = () => {
             className="form-control"
             id="title"
             name="title"
+            value={note.title}
             onChange={onChange}
           />
         </div>
@@ -46,6 +48,7 @@ const AddNote = () => {
             className="form-control"
             id="description"
             name="description"
+            value={note.description}
             onChange={onChange}
           />
         </div>
@@ -59,6 +62,7 @@ const AddNote = () => {
             className="form-control"
             id="tag"
             name="tag"
+            value={note.tag}
             onChange={onChange}
           />
         </div>

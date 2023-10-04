@@ -19,15 +19,16 @@ router.post(
     }),
   ],
   async (req, res) => {
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ error: errors.array() });
+      return res.status(400).json({ success, error: errors.array() });
     }
 
     try {
       let user = await User.findOne({ email: req.body.email });
       if (user) {
-        return res.status(400).send("User already exists");
+        return res.status(400).send({ success, error: "User already exists" });
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -45,7 +46,8 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_TOKEN);
-      res.json({ authToken });
+      success = true;
+      res.json({ success, authToken });
     } catch (err) {
       res.status(500).send("Some error occured");
     }
@@ -61,7 +63,9 @@ router.post(
   ],
   async (req, res) => {
     //If there are errors, return Bad request and the errors
+    let success = false;
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: errors.array() });
     }
@@ -69,14 +73,14 @@ router.post(
     try {
       let user = await User.findOne({ email: req.body.email });
       if (!user) {
-        return res.status(400).send("Invalid Credentials");
+        return res.status(400).send({ success, error: "Invalid Credentials" });
       }
       const passCompare = await bcrypt.compare(
         req.body.password,
         user.password
       );
       if (!passCompare) {
-        return res.status(400).send("Invalid Credentials");
+        return res.status(400).send({ success, error: "Invalid Credentials" });
       }
 
       const data = {
@@ -85,7 +89,8 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_TOKEN);
-      res.json({ authToken });
+      success = true;
+      res.json({ success, authToken });
     } catch {
       res.status(500).send("Internal Server Error");
     }
